@@ -1,14 +1,10 @@
 package com.pollra.spring;
 
 import com.pollra.spring.context.ApplicationContext;
-import com.pollra.spring.core.annotation.Component;
-import com.pollra.spring.core.scanner.BeanScanner;
 import com.pollra.spring.dummy.DummyObject;
 import com.pollra.spring.dummy.DummyService;
-
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.Set;
+import com.pollra.spring.servlet.FrontController;
+import org.eclipse.jetty.server.Server;
 
 /**
  * @since       2022.06.26
@@ -27,5 +23,16 @@ public class Application {
         DummyObject dummyObject = dummyService.get(1L);
         System.out.println("dummyObject = " + dummyObject);
 
+        FrontController frontController = new FrontController(applicationContext);
+
+        Server server = new Server(8080);
+        try {
+            server.setHandler(frontController);
+
+            server.start();
+            server.join();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

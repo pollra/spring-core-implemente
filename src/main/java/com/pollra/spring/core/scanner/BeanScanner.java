@@ -23,8 +23,8 @@ public class BeanScanner {
         return result;
     }
 
-    private static Set<Class<?>> scan(Class<? extends Annotation> annotation, Class<?> baseClass) {
+    public static Set<Class<?>> scan(Class<? extends Annotation> annotation, Class<?> baseClass) {
         Reflections reflections = new Reflections(baseClass.getPackageName(), Scanners.TypesAnnotated);
-        return reflections.getTypesAnnotatedWith(Component.class);
+        return reflections.getTypesAnnotatedWith(annotation);
     }
 }
