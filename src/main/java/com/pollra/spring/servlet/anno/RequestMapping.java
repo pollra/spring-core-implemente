@@ -1,6 +1,6 @@
 package com.pollra.spring.servlet.anno;
 
-import org.eclipse.jetty.http.HttpMethod;
+import com.pollra.spring.servlet.HttpMethod;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,11 +12,11 @@ import java.lang.annotation.Target;
  * @author      pollra
  * @description request mapping
  **********************************************************************************************************************/
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequestMapping {
 
-    String value() default "/";
+    String value() default "";
 
     HttpMethod method() default HttpMethod.GET;
 }

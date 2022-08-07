@@ -1,5 +1,7 @@
 package com.pollra.spring.servlet.anno;
 
+import com.pollra.spring.servlet.HttpMethod;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -12,7 +14,10 @@ import java.lang.annotation.Target;
  **********************************************************************************************************************/
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
+@RequestMapping(method=HttpMethod.DELETE)
 public @interface DeleteMapping {
 
     String value() default "/";
+
+    HttpMethod method() default HttpMethod.DELETE;
 }

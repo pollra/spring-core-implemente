@@ -1,19 +1,14 @@
 package com.pollra.spring.servlet;
 
-import com.pollra.spring.servlet.anno.*;
+import com.pollra.spring.servlet.classify.HandlerClassifier;
 import com.pollra.spring.servlet.exceptions.DispatchServletMethodException;
+import com.pollra.spring.servlet.request.RequestParameters;
+import lombok.Getter;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * @since       2022.07.29
@@ -22,18 +17,33 @@ import java.util.stream.Collectors;
  **********************************************************************************************************************/
 public class HandlerMethodDefinition {
 
-    private String uri;
-    private Method method;
+    @Getter
+    private HandlerDefinition handlerDefinition;
+    private final Method handledMethod;
+    private Object instance;
 
-    public HandlerMethodDefinition(Method target) {
-        Class<?>[] parameterTypes = target.getParameterTypes();
-        this.method = target;
-        setUri(target);
+    private RequestParameters requestParameters;
+
+    public HandlerMethodDefinition(Method handledMethod, Object instance, Set<HandlerClassifier> handlerClassifiers) {
+
+        Objects.requireNonNull(handledMethod);
+        Objects.requireNonNull(instance);
+
+        this.handledMethod = handledMethod;
+        this.instance = instance;
+
+        HandlerClassifier handlerReader = handlerClassifiers.stream()
+                .filter(handlerClassifier -> handlerClassifier.isMatched(handledMethod))
+                .findFirst()
+                .orElseThrow();
+        final String url = handlerReader.getUrl(handledMethod);
+        final HttpMethod httpMethod = handlerReader.getHttpMethod(handledMethod);
+        this.handlerDefinition = new HandlerDefinition(httpMethod, url);
     }
 
-    public Object invoke(Object instance, Object... parameters) {
+    public Object invoke(Object... parameters) {
         try {
-            return this.method.invoke(instance, parameters);
+            return this.handledMethod.invoke(this.instance, parameters);
         } catch (IllegalAccessException e) {
             throw new DispatchServletMethodException(e);
         } catch (InvocationTargetException e) {
@@ -41,34 +51,11 @@ public class HandlerMethodDefinition {
         }
     }
 
-    public String getUri() {
-        return this.uri;
+    public Class<?>[] getParameters() {
+        return this.handledMethod.getParameterTypes();
     }
 
-    private void setUri(Method target) {
-        RequestMapping requestMapping = target.getAnnotation(RequestMapping.class);
-        if(Objects.nonNull(requestMapping)) {
-            this.uri = requestMapping.value();
-            return;
-        }
-        PostMapping postMapping = target.getAnnotation(PostMapping.class);
-        if(Objects.nonNull(postMapping)) {
-            this.uri = postMapping.value();
-            return;
-        }
-        GetMapping getMapping = target.getAnnotation(GetMapping.class);
-        if(Objects.nonNull(getMapping)) {
-            this.uri = getMapping.value();
-            return;
-        }
-        PutMapping putMapping = target.getAnnotation(PutMapping.class);
-        if(Objects.nonNull(putMapping)) {
-            this.uri = putMapping.value();
-            return;
-        }
-        DeleteMapping deleteMapping = target.getAnnotation(DeleteMapping.class);
-        if(Objects.nonNull(deleteMapping)) {
-            this.uri = deleteMapping.value();
-        }
+    public boolean isMatched(HandlerDefinition handlerDefinition) {
+        return this.handlerDefinition.isMatched(handlerDefinition);
     }
 }

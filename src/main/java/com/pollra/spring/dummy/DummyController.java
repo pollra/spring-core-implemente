@@ -20,12 +20,18 @@ public class DummyController {
 
     @GetMapping("/")
     public String doGet() {
+        System.out.println("Hello world!");
         return "hello server!";
     }
 
     @GetMapping("/test")
     public String doTest() {
         return "test api";
+    }
+
+    @GetMapping("/test/{testId}")
+    public String doTest2() {
+        return "test api 2";
     }
 
     @GetMapping("/dummies/{dummyId}")
