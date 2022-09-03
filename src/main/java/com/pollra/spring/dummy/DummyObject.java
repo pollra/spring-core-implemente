@@ -1,9 +1,6 @@
 package com.pollra.spring.dummy;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * @since       2022.07.17
@@ -12,6 +9,8 @@ import lombok.Setter;
  **********************************************************************************************************************/
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DummyObject {
 
     private Long id;

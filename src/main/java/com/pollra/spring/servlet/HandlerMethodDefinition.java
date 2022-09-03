@@ -1,6 +1,7 @@
 package com.pollra.spring.servlet;
 
 import com.pollra.spring.servlet.classify.HandlerClassifier;
+import com.pollra.spring.servlet.definition.HandlerDefinition;
 import com.pollra.spring.servlet.exceptions.DispatchServletMethodException;
 import com.pollra.spring.servlet.request.RequestParameters;
 import lombok.Getter;
@@ -21,8 +22,6 @@ public class HandlerMethodDefinition {
     private HandlerDefinition handlerDefinition;
     private final Method handledMethod;
     private Object instance;
-
-    private RequestParameters requestParameters;
 
     public HandlerMethodDefinition(Method handledMethod, Object instance, Set<HandlerClassifier> handlerClassifiers) {
 
@@ -53,9 +52,5 @@ public class HandlerMethodDefinition {
 
     public Class<?>[] getParameters() {
         return this.handledMethod.getParameterTypes();
-    }
-
-    public boolean isMatched(HandlerDefinition handlerDefinition) {
-        return this.handlerDefinition.isMatched(handlerDefinition);
     }
 }

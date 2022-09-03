@@ -1,13 +1,11 @@
-package com.pollra.spring.servlet;
+package com.pollra.spring.servlet.request;
 
 /**
  * @since       2022.08.07
  * @author      pollra
- * @description http method
+ * @description request parameters
  **********************************************************************************************************************/
-public enum HttpMethod {
-
-    GET, POST, PUT, DELETE, OPTIONS, HEAD, CONNECT, TRACE, PATCH;
+public class RequestParameters {
 
 
 }

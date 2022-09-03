@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pollra.spring.Application;
 import com.pollra.spring.context.BeanFactory;
 import com.pollra.spring.core.scanner.BeanScanner;
-import com.pollra.spring.core.util.BeanNameUtil;
 import com.pollra.spring.servlet.anno.*;
+import com.pollra.spring.servlet.definition.HandlerDefinition;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.session.SessionHandler;
@@ -15,10 +15,6 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -30,7 +26,6 @@ public class FrontController extends SessionHandler {
 
     private BeanFactory beanFactory;
     private RequestProcessingFactory requestProcessingFactory;
-    private Map<String, Method> uriProcessingMethods = new HashMap<>();
 
     public FrontController(BeanFactory beanFactory) {
 
@@ -50,14 +45,12 @@ public class FrontController extends SessionHandler {
         // request uri 를 기준으로 처리 instance 와 처리 method 를 찾는다
         String requestURI = request.getRequestURI();
         String httpMethod = request.getMethod();
-        HandlerDefinition handlerDefinition = new HandlerDefinition(httpMethod, requestURI);
-        HandlerMethodDefinition processMethod = requestProcessingFactory.getProcessMethod(handlerDefinition);
+        HandlerDefinition requestHandlerDefinition = new HandlerDefinition(httpMethod, requestURI);
+        HandlerMethodDefinition processMethod = requestProcessingFactory.getProcessMethod(requestHandlerDefinition);
         ObjectMapper mapper = new ObjectMapper();
         Object[] arguments = null;
         String requestMethod = request.getMethod();
         if(HttpMethod.GET.name().equals(requestMethod)) {
-
-            // uri 일반화
 
             // uri 에 있는 값을 비교해서 method 추출
 

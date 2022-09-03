@@ -3,6 +3,7 @@ package com.pollra.spring.servlet;
 import com.pollra.spring.context.BeanFactory;
 import com.pollra.spring.core.util.BeanNameUtil;
 import com.pollra.spring.servlet.classify.*;
+import com.pollra.spring.servlet.definition.HandlerDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +52,11 @@ public class RequestProcessingFactory {
     }
 
     public HandlerMethodDefinition getProcessMethod(HandlerDefinition handlerDefinition) {
-        return uriProcessingMethods.get(handlerDefinition);
+        for (Map.Entry<HandlerDefinition, HandlerMethodDefinition> entry : uriProcessingMethods.entrySet()) {
+            if( entry.getKey().isMatched(handlerDefinition)) {
+                return entry.getValue();
+            }
+        }
+        throw new IllegalArgumentException();
     }
 }
