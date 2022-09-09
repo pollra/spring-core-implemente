@@ -1,4 +1,4 @@
-package com.pollra.spring.servlet.anno;
+package com.pollra.spring.servlet.anno.mappings;
 
 import com.pollra.spring.servlet.HttpMethod;
 
@@ -10,14 +10,13 @@ import java.lang.annotation.Target;
 /**
  * @since       2022.07.29
  * @author      pollra
- * @description delete mapping
+ * @description request mapping
  **********************************************************************************************************************/
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@RequestMapping(method=HttpMethod.DELETE)
-public @interface DeleteMapping {
+public @interface RequestMapping {
 
-    String value() default "/";
+    String value() default "";
 
-    HttpMethod method() default HttpMethod.DELETE;
+    HttpMethod method() default HttpMethod.GET;
 }

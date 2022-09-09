@@ -1,4 +1,4 @@
-package com.pollra.spring.servlet.anno;
+package com.pollra.spring.servlet.anno.mappings;
 
 import com.pollra.spring.servlet.HttpMethod;
 

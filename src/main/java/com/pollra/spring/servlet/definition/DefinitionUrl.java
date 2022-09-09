@@ -1,5 +1,10 @@
 package com.pollra.spring.servlet.definition;
 
+import org.eclipse.jetty.util.StringUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @since       2022.09.03
  * @author      pollra
@@ -9,9 +14,16 @@ public class DefinitionUrl {
 
     private final String path;
     private final boolean hasPathVariable;
+    private final String queries;
 
     public DefinitionUrl(String url) {
-        this.path = url;
+        String[] urlSplit = url.split("\\?");
+        this.path = urlSplit[0];
+        if(urlSplit.length >= 2) {
+            this.queries = urlSplit[1];
+        } else {
+            this.queries = "";
+        }
         this.hasPathVariable = urlHasPathVariable(this.path);
     }
 
@@ -25,6 +37,14 @@ public class DefinitionUrl {
         return false;
     }
 
+    public boolean urlHasPathVariable() {
+        return urlHasPathVariable(this.path);
+    }
+
+    public boolean uriHasQueryVariable() {
+        return StringUtil.isNotBlank(queries);
+    }
+
     public boolean isMatched(DefinitionUrl requestUrl) {
         if(hasPathVariable) {
             String[] persistPaths = this.path.split("/");
@@ -35,8 +55,8 @@ public class DefinitionUrl {
             }
 
             for (int i = 0; i < persistPaths.length; i++) {
-                boolean isEquals = isMatched(persistPaths[i], requestPaths[i]);
-                if(! isEquals) {
+                boolean isNotEquals = ! isMatched(persistPaths[i], requestPaths[i]);
+                if(isNotEquals) {
                     return false;
                 }
             }
@@ -50,5 +70,34 @@ public class DefinitionUrl {
             return true;
         }
         return persist.equals(request);
+    }
+
+    public Map<String, Object> getPathVariable(DefinitionUrl requestDefinition) {
+        Map<String, Object> result = new HashMap<>();
+        String[] persistPaths = this.path.split("/");
+        String[] requestPaths = requestDefinition.path.split("/");
+
+        for (int i = 0; i < persistPaths.length; i++) {
+            if(persistPaths[i].contains("{")) {
+                int startRange = persistPaths[i].indexOf("{");
+                int endRange   = persistPaths[i].lastIndexOf("}");
+                String argumentName = persistPaths[i].substring(startRange, endRange);
+                result.put(argumentName, requestPaths[i]);
+            }
+        }
+        return result;
+    }
+
+    public Map<String, Object> getQueryVariable(DefinitionUrl requestDefinition) {
+        Map<String, Object> result = new HashMap<>();
+        String[] queries = requestDefinition.queries.split("&");
+
+        final int key = 0;
+        final int value = 1;
+        for (int i = 0; i < queries.length; i++) {
+            String[] entry = queries[i].split("=");
+            result.put(entry[key], entry[value]);
+        }
+        return result;
     }
 }

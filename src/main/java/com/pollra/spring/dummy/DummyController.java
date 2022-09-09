@@ -1,9 +1,10 @@
 package com.pollra.spring.dummy;
 
 import com.pollra.spring.core.annotation.Component;
-import com.pollra.spring.servlet.anno.PostMapping;
+import com.pollra.spring.servlet.anno.arguments.PathVariable;
+import com.pollra.spring.servlet.anno.mappings.PostMapping;
 import com.pollra.spring.servlet.anno.RestController;
-import com.pollra.spring.servlet.anno.GetMapping;
+import com.pollra.spring.servlet.anno.mappings.GetMapping;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -30,8 +31,8 @@ public class DummyController {
     }
 
     @GetMapping("/test/{testId}")
-    public String doTest2() {
-        return "test api 2";
+    public String doTest2(@PathVariable(value="testId") Long testId) {
+        return "test api " + testId;
     }
 
     @GetMapping("/dummies/{dummyId}")

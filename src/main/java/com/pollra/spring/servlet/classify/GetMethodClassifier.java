@@ -1,11 +1,9 @@
 package com.pollra.spring.servlet.classify;
 
 import com.pollra.spring.servlet.HttpMethod;
-import com.pollra.spring.servlet.anno.GetMapping;
-import com.pollra.spring.servlet.exceptions.DispatchServletMethodException;
+import com.pollra.spring.servlet.anno.mappings.GetMapping;
 
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
  * @since       2022.08.07

@@ -4,6 +4,7 @@ import com.pollra.spring.servlet.HttpMethod;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -41,5 +42,21 @@ public class HandlerDefinition {
         log.info("request: "+requestHandlerDefinition);
         return this.url.isMatched(requestUrl)
             && this.httpMethod.equals(requestHttpMethod);
+    }
+
+    public Map<String, Object> getPathVariable(HandlerDefinition requestHandlerDefinition) {
+        boolean isMatched = isMatched(requestHandlerDefinition);
+        if(! isMatched) {
+            throw new DefinitionException("해당 메서드로 처리할 수 없는 기능입니다.");
+        }
+        return url.getPathVariable(requestHandlerDefinition.url);
+    }
+
+    public Map<String, Object> getQueryVariable(HandlerDefinition requestHandlerDefinition) {
+        boolean isNotMatched = ! isMatched(requestHandlerDefinition);
+        if( isNotMatched ) {
+            throw new DefinitionException("해당 메서드로 처리할 수 없는 기능입니다.");
+        }
+        return url.getQueryVariable(requestHandlerDefinition.url);
     }
 }

@@ -1,4 +1,4 @@
-package com.pollra.spring.servlet.anno;
+package com.pollra.spring.servlet.anno.mappings;
 
 import com.pollra.spring.servlet.HttpMethod;
 
@@ -10,13 +10,14 @@ import java.lang.annotation.Target;
 /**
  * @since       2022.07.29
  * @author      pollra
- * @description request mapping
+ * @description put mapping
  **********************************************************************************************************************/
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RequestMapping {
+@RequestMapping(method=HttpMethod.PUT)
+public @interface PutMapping {
 
-    String value() default "";
+    String value() default "/";
 
-    HttpMethod method() default HttpMethod.GET;
+    HttpMethod method() default HttpMethod.PUT;
 }

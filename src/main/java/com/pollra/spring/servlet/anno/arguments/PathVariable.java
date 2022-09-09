@@ -1,6 +1,4 @@
-package com.pollra.spring.servlet.anno;
-
-import com.pollra.spring.servlet.HttpMethod;
+package com.pollra.spring.servlet.anno.arguments;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,16 +6,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @since       2022.07.29
+ * @since       2022.09.09
  * @author      pollra
- * @description post mapping
+ * @description path variable
  **********************************************************************************************************************/
-@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-@RequestMapping(method=HttpMethod.POST)
-public @interface PostMapping {
+@Target({ElementType.PARAMETER})
+public @interface PathVariable {
 
-    String value() default "/";
-
-    HttpMethod method() default HttpMethod.POST;
+    /**
+     * 값의 이름을 지정합니다.
+     * 이는 url 에 지정되어있는 값 이름과 동일해야 합니다.
+     */
+    String value() default "";
 }

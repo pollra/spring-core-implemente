@@ -1,7 +1,7 @@
 package com.pollra.spring.servlet.classify;
 
 import com.pollra.spring.servlet.HttpMethod;
-import com.pollra.spring.servlet.anno.PutMapping;
+import com.pollra.spring.servlet.anno.mappings.PutMapping;
 
 import java.lang.reflect.Method;
 
