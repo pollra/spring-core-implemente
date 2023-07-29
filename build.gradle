@@ -15,6 +15,11 @@ dependencies {
     implementation 'org.reflections:reflections:0.10.2'
     implementation 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    implementation("org.eclipse.jetty:jetty-server:9.4.31.v20200723")
+    implementation("org.eclipse.jetty:jetty-servlet:9.4.31.v20200723")
+    implementation("org.slf4j:slf4j-api:1.7.36")
+    implementation("org.slf4j:slf4j-simple:1.7.36")
+    implementation('com.fasterxml.jackson.core:jackson-databind:2.13.3')
 }
 
 test {
